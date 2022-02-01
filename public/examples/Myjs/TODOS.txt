@@ -1,0 +1,14 @@
+1: highlight on hover
+3: style part selection buttons(checkboxes)
+4: checkboxes mutually exclusive problem
+    works for checkboxes but not when part clicked
+5:// TODO : tween to new position - its a must
+6:// TODO : automatic presentation mode where app cycles itself through parts
+7: BLENDER // because each part has different size generate maybe camera orbit animations in blender  just the positions for respective focus parts 
+    // and use these empties in  three js as positions, on click would stop the animation
+8: BLENDER stop other parts animating after click , use NLA actions while saving DONE
+    PROBLEM!!!! 
+
+        !!! OUTLINE IS NOT UPDATING !!!
+2:onresize should reset ouline pass (its initiated with window width)
+    for now resize restes only renderer not passes

@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Aaaaaaaa_webgl_loader_gltf</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<!-- <link type="text/css" rel="stylesheet" href="main.css"> -->
+	<link type="text/css" rel="stylesheet" href="style.css">
+</head>
+<style>
+	#navcnt {
+		position: absolute;
+		display: flex;
+		perspective: 200px;
+		align-items: center;
+		position: absolute;
+		top: 87vh;
+		width: 100vw;
+		align-content: space-around;
+		justify-content: space-around;
+
+	}
+
+	nscript {
+		display: none;
+	}
+
+
+	body {
+		background-color: black;
+		margin: 0px;
+	}
+
+	div#interface {
+		position: absolute;
+		width: 100%;
+	}
+
+	.shown,
+	.navbtn,
+	.fs_btn,
+	#popup {
+		background-color: rgba(191, 189, 219, 0.329);
+		color: #ffffff;
+		padding: 2vh;
+		border: 2px solid rgba(89, 148, 31, 0.575);
+		border-radius: 10px;
+		opacity: 100%;
+		font-family: monospace;
+		font-weight: bold;
+	}
+
+	#popup,
+	.navbtn {
+
+
+		transform: scale3d(1, 1, 1);
+		min-height: 1em;
+
+		transition: all 300ms ease-out;
+		user-select: none;
+		/* supported by Chrome and Opera */
+		-webkit-user-select: none;
+		/* Safari */
+		-khtml-user-select: none;
+		/* Konqueror HTML */
+		-moz-user-select: none;
+		/* Firefox */
+		-ms-user-select: none;
+		/* Internet Explorer/Edge */
+	}
+
+
+	#LEFT {
+		transform: scale3d(1, 1, 1) rotateX(5deg) rotateY(20deg) translateZ(1em);
+	}
+
+	#RIGHT {
+		transform: scale3d(1, 1, 1) rotateX(5deg) rotateY(-20deg) translateZ(1em);
+	}
+
+	#ENTER {
+		transform: scale3d(1, 1, 1) rotateX(5deg) rotateY(0deg) translateZ(1em);
+	}
+
+	.navbtn:hover {
+		padding: 4vh;
+		min-height: 5em;
+		opacity: 90%;
+
+		background-color: rgba(255, 255, 255, 0);
+		/* transform: scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) translateZ(2em); */
+	}
+
+	.navbtn:active {
+		/* transform: scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) translateZ(2em); */
+		background-color: rgba(255, 255, 255, 0.781);
+	}
+
+
+
+
+
+
+
+	.shown {
+		z-index: 1;
+		background-color: rgba(191, 189, 219, 0.577);
+		position: absolute;
+
+		width: 88vw;
+		height: 80vh;
+		left: 50vw;
+		top: 50vh;
+		margin-left: -44vw;
+		margin-top: -42vh;
+		transform: scale(1);
+		overflow-y: scroll;
+	}
+
+	p {
+		font-size: 1.5em;
+	}
+
+
+	canvas {
+		display: block;
+
+	}
+
+	.fs_btn {
+		/* background-image: url("fs_icon.png"); */
+		opacity: 100%;
+		display: block;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: auto;
+		user-select: none;
+	}
+
+	#fs_ico,
+	#fs_txt {
+		position: relative;
+		top: 50
+	}
+
+	.shown {
+		display: block;
+		opacity: 1;
+		transition: opacity 0.5s linear;
+
+
+	}
+
+	.hiddenContent {
+		display: none;
+		opacity: 0;
+		transition: opacity 0.5s linear;
+	}
+
+	.progressbar {
+
+		background-color: chartreuse;
+		height: 1;
+		width: 0%;
+		overflow-x: visible;
+		transition: width 100ms linear;
+		margin: 10px;
+
+	}
+
+	.progress {
+		display: flex;
+		align-content: center;
+		justify-content: flex-start;
+		align-items: center;
+		background-color: rgba(191, 189, 219, 0.329);
+		color: #ffffff;
+		padding: 2vh;
+		border: 2px solid rgba(89, 148, 31, 0.575);
+		border-radius: 10px;
+		opacity: 100%;
+		font-family: monospace;
+		font-weight: bold;
+	}
+
+
+
+
+	.spinner {
+		opacity: 1;
+		color: white;
+		width: 36vw;
+		height: 36vw;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		margin: -18vw;
+		transition: all 0.5s linear;
+	}
+
+
+
+	.progress {
+		opacity: 1;
+		padding: 0px;
+		color: white;
+		width: 28vw;
+		height: 2em;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		margin-top: -1em;
+		margin-left: -14vw;
+
+		transition: all 0.5s linear;
+	}
+
+	.spinner {
+
+		/* border-left: 5px solid chartreuse; */
+		/* border-top: 10px solid chartreuse; */
+		border-top: 8px solid chartreuse;
+		border-left: 4px solid rgba(128, 255, 0, 0.466);
+		border-right: 8px solid transparent;
+		border-bottom: 0px solid transparent;
+
+
+
+		background-color: transparent;
+
+		border-radius: 50%;
+		-webkit-animation: spinnyanim 1.0s infinite ease-in-out;
+		animation: spinnyanim 1.0s infinite linear;
+
+	}
+
+	@-webkit-keyframes spinnyanim {
+		0% {
+			-webkit-transform: rotateZ(0deg);
+		}
+
+		50% {
+
+			-webkit-transform: rotateZ(180deg);
+
+		}
+
+		100% {
+			-webkit-transform: rotateZ(360deg);
+		}
+	}
+
+	@keyframes spinnyanim {
+		0% {
+			-webkit-transform: rotateZ(0deg);
+			transform: rotateZ(0deg);
+		}
+
+		50% {
+
+			-webkit-transform: rotateZ(180deg);
+			transform: rotateZ(180deg);
+
+		}
+
+		100% {
+			-webkit-transform: rotateZ(360deg);
+			transform: rotateZ(360deg);
+
+		}
+	}
+
+	@media (orientation: landscape) {
+		.spinner {
+			width: 64vh;
+			height: 64vh;
+			margin: -32vh;
+			left: 50%;
+			top: 50%;
+			border-top: 1vh solid chartreuse;
+			border-left: 0.5vh solid rgba(128, 255, 0, 0.466);
+			border-right: 1vh solid transparent;
+			border-bottom: 0px solid transparent;
+		}
+	}
+
+	@media (orientation: portrait) {
+		.spinner {
+			width: 70vw;
+			height: 70vw;
+			margin: -35vw;
+			left: 50%;
+			top: 50%;
+			border-top: 1vw solid chartreuse;
+			border-left: 0.5vw solid rgba(128, 255, 0, 0.466);
+			border-right: 1vw solid transparent;
+			border-bottom: 0px solid transparent;
+		}
+
+		.progress {
+			padding: 0px;
+			color: white;
+			width: 64vw;
+			height: 2em;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-top: -1em;
+			margin-left: -32vw;
+
+
+		}
+	}
+
+	.transpy {
+		opacity: 0;
+		transform: scale(2);
+		transition: all 0.5s linear;
+	}
+</style>
+
+<body>
+
+	<script>
+		window.onerror = (...x) => {
+			console.error(x);
+			// let u = document.createElement("div")
+			// u.style.color = "black"
+			// u.innerHTML = x.join("<br/>")
+			// document.body.append(u)
+		}
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
+	<div id='app' style="opacity:100%;">
+		<div id="fs_btn" class="fs_btn">
+
+			<!-- <img id="fs_ico" src="fs_icon.png"> -->
+			<div id="fs_txt">Full Screen</div>
+
+		</div>
+		<div id="progress" class="progress">
+			<div id="progressbar" class="progressbar">
+
+			</div>
+
+		</div>
+		<div id="spinner" class="spinner"></div>
+
+		<div id="interface">
+
+			<div id="Blog" class="hiddenContent">
+				<h1>Blog</h1>
+
+			</div>
+			<div id="Contact" class="hiddenContent">
+				<h1>Contact</h1>
+
+			</div>
+			<div id="GithubT" class="hiddenContent">
+				<h1>GithubT</h1>
+				You can find most of my projects on <a href="https://github.com/Osmiogrzesznik">Github</a>
+
+			</div>
+			<div id="Music" class="hiddenContent">
+				<h1>Music</h1>
+				<p>
+
+					<a href="https://www.reverbnation.com/Underlandpl">www.reverbnation</a>
+					<a href="https://www.soundcloud.com/siedmiogrzesznik/tracks">www.soundcloud</a>
+				</p>
+
+
+
+			</div>
+			<div id="SourceCowD_Matrix" class="hiddenContent">
+				<h1>SourceCowD</h1>
+				<p>
+					I am a programmer and visual designer, driven by passion to complexity and process of
+					simplifying, abstracting and encapsulating it
+					to achieve usable solution.
+					I am most proficient in 3d software, python and web technologies.
+					Always seeking to innovate, improve, automate and create
+					tools with focus on cost involved. With mutliplicity of past interests, i can swiftly arrange
+					holisitic solutions
+					for Your Website and make it stand out.
+
+				</p>
+			</div>
+			<div id="Youtube" class="hiddenContent">
+				<h1>Youtube</h1>
+				<p>
+					With my assitant we release Tutorials and video shorts on our
+					Youtube channels <a href="https://youtube.com/channel/UCOYqTKszxFQwOxs-mEVscZg">SourceCowD
+						channel</a>
+					and <a href="https://youtube.com/user/Siedmiogrzesznik">Apeiron Project channel</a>
+				</p>
+			</div>
+
+
+
+			<div id="navcnt">
+
+				<div id="LEFT" class="navbtn">
+
+					< </div> <div id="ENTER" class="navbtn">
+						Enter
+				</div>
+				<div id="RIGHT" class="navbtn">
+					>
+
+				</div>
+			</div>
+			<div id="popup">
+
+			</div>
+
+
+		</div>
+
+	</div>
+	<script type="module">
+
+		var interactor = {
+			shownElement: null,
+			progressbar: null,
+			progress:null,
+		  canBeInteracted(obj){
+			  return obj.userData.cameraFocusable;
+		  },
+		  showContent(obj){
+			  this.shown = true;
+			// window.open(obj.userData.link);
+			// window.open(obj.userData.link);
+			this.shownElement = document.getElementById(obj.name);
+			this.shownElement.classList.add("shown");
+
+			this.shownElement.classList.remove("hiddenContent");
+			console.log(this.shownElement)
+		  },
+		  hideContent(obj){
+			  this.shown = false;
+			// window.open(obj.userData.link);
+			// window.open(obj.userData.link);
+			this.shownElement.classList.remove("shown")
+			this.shownElement.classList.add("hiddenContent");
+		  },
+		  getlink(obj){
+			// return window.location + obj.userData.link;
+			return + "/" + obj.name;
+		  },
+		  interact(obj,viewer){
+
+		  },
+		  progressUpdate(xhri){
+			  if(!this.progressbar){this.progressbar = document.getElementById("progressbar")}
+			  if(!this.progress){this.progress= document.getElementById("progress")}
+			window.x = xhri;
+			  //xhri - XMLHttpRequest instance
+			  let total = xhri.total;
+			  let loaded = xhri.loaded;
+			  let frac = Math.round(100*loaded/total) + "%";
+			  console.log(frac)
+			  this.progressbar.style.width = frac ;
+			  this.progressbar.innerText = frac ;
+
+		  },
+		  progressFinished(){
+			  
+			let popup = document.getElementById('popup')
+			let spinner = document.getElementById("spinner")
+			let progressbar = this.progressbar
+			let progress = this.progress
+			let elsToHide = [spinner,progressbar,progress]
+			popup.style.display = "none"
+			elsToHide.forEach(el=>el.classList.add("transpy"));
+			
+			elsToHide.forEach(el=>{
+			let anothel = el;
+			el.addEventListener('transitionend',_=>{
+				anothel.style.display = "none";
+			})
+		});
+			
+
+			
+		  }
+	  }
+
+	  var customAnimations = {
+		  spongeMap:null,
+		  pathMap:null,
+		  offsetVecPath:new THREE.Vector2(0.003,0.01),
+		  offsetVecSponge:new THREE.Vector2(0.005,0.001),
+		  repeatVecSponge:new THREE.Vector2(1,1),
+		  repeatVecPath:new THREE.Vector2(2,2),
+		  prepare(node){
+			if (!this.spongeMap && node.name.startsWith("Sponge")) {
+				this.spongeMap = node.material.map;
+				this.repeatVecSponge = node.material.map.repeat;
+			}
+			if (!this.pathMap && node.name.endsWith("_path")) {
+				this.pathMap = node.material.map;
+				this.repeatVecPath = node.material.map.repeat;
+			}
+			if (!this.pathMap && node.name.endsWith("_wire")) {
+				this.pathMap = node.material.map;
+				this.repeatVecPath = node.material.map.repeat;
+			}
+			
+		  },
+		  onAfterPrepare(){
+			// this.randomize = _=>{
+			// 	let u = Math.random();
+
+			// 	if(Math.random() > .5) this.repeatVecPath.set(Math.random()*.5,Math.random()*.5);
+			// 	// if(Math.random() > .5) this.repeatVecSponge.set(Math.random()*2-1,Math.random()*1-0.5);
+			// 	if(Math.random() > .5) this.offsetVecPath.set(Math.random()*0.04 - 0.02,Math.random()*0.002 - 0.001);
+			// 	window.setTimeout(this.randomize,Math.random()*6000);	
+			// }
+
+			if(this.spongeMap) this.spongeMap.repeat.set(2,0.25);
+			if(this.pathMap) this.pathMap.repeat.set(2,0.25);
+			window.customAnimations = this;
+			// window.setTimeout(this.randomize,2000);	
+		  },
+		  update(time){
+			
+			if(this.spongeMap) this.spongeMap.offset.add(this.offsetVecSponge);
+			if(this.pathMap) this.pathMap.offset.add(this.offsetVecPath);
+			
+		  }
+	  }
+		console.log(0);
+			
+			
+			
+			console.log(1)
+			
+			import {Viewer} from './examples/Myjs/Aviewer3.js';
+			import {Vector2} from './build/three.module.js';
+
+    let options = {
+      kiosk: true,
+      model: '',
+      preset: '',
+	  interactor:interactor,
+	  customAnimations: customAnimations
+    };
+ 	var el = document.getElementById('app');
+
+
+	window.v = new Viewer(el,options);
+	var viewer = window.v;
+	window.opacityanim = 0;
+	window.zoomanim = 0;
+	// var nm = "t rr2.glb";
+	var nm = "Matrix3dsourcecowd.glb";//"quality app rr31 n markers.glb";	
+	var nm = "pressing2.glb";//"quality app rr31 n markers.glb";	
+    var nm2 = "quality app rr31 n markers.glb";	
+	var file= {name:nm}
+	// var file2= {name:"quality app rr31 n markers.glb"}
+	var rootPath = "examples/Mymodels/";
+	var fileURL = rootPath + file.name
+	var fileMap = new Map([[fileURL,file]])
+
+	function openFullscreen(elem = el) { 
+	elem = window.document.body;
+	
+	if (elem.requestFullscreen) { elem.requestFullscreen(); } 
+	else if (elem.mozRequestFullScreen) { /* Firefox */ elem.mozRequestFullScreen(); } 
+	else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */ elem.webkitRequestFullscreen(); } 
+	else if (elem.msRequestFullscreen) { /* IE/Edge */ elem.msRequestFullscreen(); } 
+	elem.style.width = '100%'; elem.style.height = '100%'; 
+}
+	fs_btn.addEventListener('click',openFullscreen)
+
+			viewer
+    //   .load(fileURL, rootPath, fileMap)
+      .load(fileURL, rootPath, fileMap)
+      .catch((e) => window.onerror(JSON.stringify(e)))
+      .then((gltf) => {
+        // if (!this.options.kiosk) {
+        //   this.validationCtrl.validate(fileURL, rootPath, fileMap, gltf);
+        // }
+        // cleanup();
+		
+		console.log("BOBO:loaded",gltf)
+		viewer.render()
+		viewer.resize()
+		window.viewer = viewer;
+
+		function openObjectLink(obj){
+			alert(obj.userData.link)
+			window.location = obj.userData.link;
+		}
+
+		function animateJumpToNextObject(dir){
+			
+			viewer.autoPresentationNext(dir)
+				
+				let popup = document.getElementById('popup')
+				popup.style.position = "absolute";
+				// viewer.pointerOrig.x = popup.style.left = window.document.body.clientWidth / 2 + "px";
+				// viewer.pointerOrig.y = popup.style.top = window.document.body.clientHeight / 2 + "px";
+				popup.innerText = `looked At: ${viewer.state.lookedAt}`;
+            
+		}
+
+		function animateContentInteraction(){
+			if(!interactor.shown){
+				interactor.showContent(viewer.state.lookedAt);
+				let maxDistanceOrig = viewer.controls.maxDistance
+			console.log(viewer.el)
+			window.opa = 1
+			window.opacityanim = gsap.to(window.opa,{//viewer.renderer.domElement.style
+				opacity: 0.2, // target min distance
+				duration: 2,
+				overwrite: 'auto',
+				ease: 'power1.in',
+				onComplete: () => {
+					viewer.renderer.domElement.style.opacity = 1;
+					
+					// viewer.el.style.opacity = "100%"
+					viewer.controls.maxDistance = maxDistanceOrig // reset to initial min distance
+
+				},
+			})
+			window.zoomanim = gsap.to(viewer.controls, {
+				maxDistance: 4, // target min distance
+				minDistance: 4,
+				duration: 3,
+				overwrite: 'auto',
+				ease: 'power1.inOut',
+				onComplete: () => {
+					
+					viewer.controls.maxDistance = maxDistanceOrig // reset to initial min distance
+					viewer.controls.minDistance = 4 // reset to initial min distance
+
+				},
+			})
+	
+			}
+			else{
+				interactor.hideContent(viewer.state.lookedAt);
+			
+			}
+			ENTER.innerText = interactor.shown ? "Back ": "Enter"
+			
+				// viewer.startZooming(_=>window.open(link));
+		}
+
+		document.onkeydown = checkKey;
+		function checkKey(e) {
+
+e = e || window.event;
+
+if (e.keyCode == '38') {
+	//up
+	viewer.autoPresentationNext(-1)
+}
+else if (e.keyCode == '40') {
+	//down
+	viewer.autoPresentationNext()
+}
+else if (e.keyCode == '37') {
+	//left
+	viewer.autoPresentationNext(-1)
+}
+else if (e.keyCode == '39') {
+	//right
+	viewer.autoPresentationNext()
+}
+
+}
+LEFT.addEventListener("click",_=>animateJumpToNextObject(-1))
+RIGHT.addEventListener("click",_=>animateJumpToNextObject())
+ENTER.addEventListener("click",animateContentInteraction)
+		document.addEventListener('keypress', function (e) {
+			console.log(JSON.stringify(e.key));
+            if ([" ","s","d"].includes(e.key) || e.keyCode == 9) {
+            animateJumpToNextObject();   
+			}
+			else if ([" ","a","w"].includes(e.key) || e.keyCode == 9) {
+            animateJumpToNextObject(-1);   
+			}
+			else if (["Enter"].includes(e.key)) {
+                // code for enter
+				animateContentInteraction();
+            }
+        })
+      });
+			
+			//window.THREE=THREE;
+			
+			</script>
+
+
+</body>
+
+</html>
