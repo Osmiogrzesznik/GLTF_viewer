@@ -460,8 +460,10 @@ export class Viewer {
 			Object.keys(this.state.lookAtPartStates).forEach(nm => this.state.lookAtPartStates[nm] = false);
 			//set currently clicked to true
 			this.state.lookAtPartStates[changedCheckboxName] = true;
-
-			this.outlinePass.selectedObjects[0] = obj;
+			
+			if(!obj.name.endsWith("_wire")){
+				this.outlinePass.selectedObjects[0] = obj;
+			}
 
 			// this.controls.AutoRotate = true;
 			// this.controls.rotateSpeed
@@ -516,9 +518,9 @@ export class Viewer {
 			let tweenDuration = 5;
 			let cameraEndPos = new THREE.Vector3();
 			cameraEndPos.copy(center);
-			cameraEndPos.y += this.options.autoCamera.minHeight + (Math.random() * maxHeight);
-			cameraEndPos.x -= size * 60;
-			cameraEndPos.z += size * 50;
+			cameraEndPos.y += this.options.autoCamera.minHeight + (Math.random() * this.options.autoCamera.maxHeight);
+			cameraEndPos.x -= size * 80;
+			cameraEndPos.z += size * 80;
 
 			// console.log('position before parenting', this.cam_dummy.localToWorld(new THREE.Vector3(0, 0, 0)));
 			// this.cam_dummy.parent = obj;
