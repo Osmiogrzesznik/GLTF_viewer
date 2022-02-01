@@ -516,7 +516,7 @@ export class Viewer {
 			let tweenDuration = 5;
 			let cameraEndPos = new THREE.Vector3();
 			cameraEndPos.copy(center);
-			cameraEndPos.y += -200 + (Math.random() * 400);
+			cameraEndPos.y += this.options.autoCamera.minHeight + (Math.random() * maxHeight);
 			cameraEndPos.x -= size * 60;
 			cameraEndPos.z += size * 50;
 
