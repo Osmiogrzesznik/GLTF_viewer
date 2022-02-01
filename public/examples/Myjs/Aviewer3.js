@@ -154,7 +154,9 @@ export class Viewer {
 		const fov = options.preset === Preset.ASSET_GENERATOR ?
 			0.8 * 180 / Math.PI :
 			80;
+
 		this.defaultCamera = new THREE.PerspectiveCamera(fov, el.clientWidth / el.clientHeight, 0.005, 1000);
+		this.defaultCamera.name = DEFAULT_CAMERA;
 		this.activeCamera = this.defaultCamera;
 		this.scene.add(this.defaultCamera);
 		// this.scene.fog = new THREE.Fog(0x000000, 10, 100);
